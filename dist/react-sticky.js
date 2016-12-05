@@ -168,11 +168,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function Container(props) {
 	    _classCallCheck(this, Container);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Container).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (Container.__proto__ || Object.getPrototypeOf(Container)).call(this, props));
 
 	    _this.updateOffset = function (_ref) {
-	      var inherited = _ref.inherited;
-	      var offset = _ref.offset;
+	      var inherited = _ref.inherited,
+	          offset = _ref.offset;
 
 	      _this.channel.update(function (data) {
 	        data.inherited = inherited + offset;
@@ -273,11 +273,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function Sticky(props) {
 	    _classCallCheck(this, Sticky);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Sticky).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (Sticky.__proto__ || Object.getPrototypeOf(Sticky)).call(this, props));
 
 	    _this.updateContext = function (_ref) {
-	      var inherited = _ref.inherited;
-	      var node = _ref.node;
+	      var inherited = _ref.inherited,
+	          node = _ref.node;
 
 	      _this.containerNode = node;
 	      _this.setState({
@@ -366,7 +366,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (!this.props.isActive) return false;
 
 	      var fromTop = this.getDistanceFromTop();
-	      var fromBottom = this.getDistanceFromBottom();
+	      var fromBottom = this.getDistanceFromBottom() + this.props.fixedOffset;
 
 	      var topBreakpoint = this.state.containerOffset - this.props.topOffset;
 	      var bottomBreakpoint = this.state.containerOffset + this.props.bottomOffset;
@@ -437,14 +437,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.state.isSticky) {
 	        var _stickyStyle = {
 	          position: 'fixed',
-	          top: this.state.containerOffset,
+	          top: this.state.containerOffset + this.props.fixedOffset,
 	          left: this.state.xOffset,
 	          width: this.state.width
 	        };
 
-	        var bottomLimit = this.state.distanceFromBottom - this.state.height - this.props.bottomOffset;
+	        var bottomLimit = this.state.distanceFromBottom - this.state.height - this.props.bottomOffset - this.props.fixedOffset;
 	        if (this.state.containerOffset > bottomLimit) {
-	          _stickyStyle.top = bottomLimit;
+	          _stickyStyle.top = bottomLimit + this.props.fixedOffset;
 	        }
 
 	        placeholderStyle.paddingBottom = this.state.height;
@@ -453,15 +453,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        style = _extends({}, style, _stickyStyle, this.props.stickyStyle);
 	      }
 
-	      var _props = this.props;
-	      var topOffset = _props.topOffset;
-	      var isActive = _props.isActive;
-	      var stickyClassName = _props.stickyClassName;
-	      var stickyStyle = _props.stickyStyle;
-	      var bottomOffset = _props.bottomOffset;
-	      var onStickyStateChange = _props.onStickyStateChange;
-
-	      var props = _objectWithoutProperties(_props, ['topOffset', 'isActive', 'stickyClassName', 'stickyStyle', 'bottomOffset', 'onStickyStateChange']);
+	      var _props = this.props,
+	          topOffset = _props.topOffset,
+	          isActive = _props.isActive,
+	          stickyClassName = _props.stickyClassName,
+	          stickyStyle = _props.stickyStyle,
+	          bottomOffset = _props.bottomOffset,
+	          fixedOffset = _props.fixedOffset,
+	          onStickyStateChange = _props.onStickyStateChange,
+	          props = _objectWithoutProperties(_props, ['topOffset', 'isActive', 'stickyClassName', 'stickyStyle', 'bottomOffset', 'fixedOffset', 'onStickyStateChange']);
 
 	      return _react2.default.createElement(
 	        'div',
@@ -485,6 +485,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  style: _react2.default.PropTypes.object,
 	  stickyClassName: _react2.default.PropTypes.string,
 	  stickyStyle: _react2.default.PropTypes.object,
+	  fixedOffset: _react2.default.PropTypes.number,
 	  topOffset: _react2.default.PropTypes.number,
 	  bottomOffset: _react2.default.PropTypes.number,
 	  onStickyStateChange: _react2.default.PropTypes.func
@@ -495,6 +496,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  style: {},
 	  stickyClassName: 'sticky',
 	  stickyStyle: {},
+	  fixedOffset: 0,
 	  topOffset: 0,
 	  bottomOffset: 0,
 	  onStickyStateChange: function onStickyStateChange() {}
